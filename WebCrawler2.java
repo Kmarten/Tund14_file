@@ -1,10 +1,11 @@
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class WebCrawler2{
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws Exception {
         Scanner input = new Scanner(System.in);
         //java.io.PrintWriter pw = new java.io.PrintWriter("css/");
         System.out.print("Enter a URL: ");
@@ -12,6 +13,7 @@ public class WebCrawler2{
         File css = new File("src/css");
         boolean del = false;
         if(css.exists()) del = css.delete();
+        System.out.println(del);
         if(!css.mkdirs()) {
             System.out.println("Error creating folder");
         }
@@ -42,14 +44,30 @@ public class WebCrawler2{
         boolean del = false;
         if(currentcss > 0) {
             int endIndex = line.indexOf(".css\"");
-            String css = line.substring(currentcss, endIndex);
-            css = css.replaceAll("href=\"/","");
-            System.out.println(css);
-            File tmp = new File("src/css/"+urlname);
-            if(tmp.exists()) del = tmp.delete();
+            String css = null;
+            if(endIndex > 0) {
+                css = line.substring(currentcss, endIndex);
+                //System.out.println(css);
+                String normurl = urlname.substring(currentcss, urlname.indexOf("\""));
+                css = css.replaceAll("href=\"/", "");
+                try {
+
+                    System.out.println("Try block");
+                    URL cssurl = new URL("http://" + normurl + "/" + css + ".css\"");
+                    System.out.println(cssurl);
+                    //System.out.println("here");
+                } catch (MalformedURLException ex) {
+                    System.out.println(ex.getMessage());
+                    System.out.println("Error in catch");
+                }
+            }
+            //System.out.println(css);
+            //File tmp = new File("src/css/"+urlname);
+
+            /*if(tmp.exists()) del = tmp.delete();
             if(!tmp.mkdirs()) {
                 System.out.println("getCss:Error creating folder");
-            }
+            }*/
         }
     }
     public static ArrayList<String> getSubURLs(String urlString) {
