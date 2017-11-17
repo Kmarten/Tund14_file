@@ -9,7 +9,7 @@ public class WebCrawler2{
         //java.io.PrintWriter pw = new java.io.PrintWriter("css/");
         System.out.print("Enter a URL: ");
         String url = input.nextLine();
-        File css = new File("src/css");
+        File css = new File("css");
         boolean del = false;
         if(css.exists()) del = css.delete();
         if(!css.mkdirs()) {
@@ -42,13 +42,17 @@ public class WebCrawler2{
         int currentcss = line.indexOf("href=\"");
         boolean del = false;
         if(currentcss > 0) {
-            int endIndex = line.indexOf(".css\"");
+            int endIndex = line.indexOf(".css");
             if(endIndex > 0) {
                 String css = line.substring(currentcss, endIndex);
-                String urlcss = urlname.substring(currentcss,endIndex) + css + ".css/";
-                //css = css.replaceAll("href=\"/", "");
-                urlcss = urlcss.replaceAll("href=\"/", "");
-                System.out.println(urlcss);
+
+                //String urlcss = urlname.substring(currentcss,endIndex) + css + ".css/";
+                css = css.replaceAll("href=\"", "");
+                css = css + ".css/";
+                css = urlname.substring(urlname.indexOf("http://"),urlname.indexOf("/")) + css;
+                //css = css.replaceAll("href=\"", "");
+                System.out.println(css);
+                //System.out.println("Urlclass: " + urlcss);
                 //System.out.println("Done");
             }
             //File tmp = new File("src/css/"+urlname);
