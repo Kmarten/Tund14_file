@@ -46,10 +46,10 @@ public class WebCrawler2{
             css = css.replaceAll("href=\"/","");
             System.out.println(css);
             File tmp = new File("src/css/"+urlname);
-            if(tmp.exists()) del = tmp.delete();
+            /*if(tmp.exists()) del = tmp.delete();
             if(!tmp.mkdirs()) {
                 System.out.println("getCss:Error creating folder");
-            }
+            }*/
         }
     }
     public static ArrayList<String> getSubURLs(String urlString) {
