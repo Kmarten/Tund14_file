@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -37,29 +38,21 @@ public class WebCrawler2{
             }
         }
     }
-    public static void getCss(String line, String urlname) {
-        //System.out.println(urlname);
+    public static void getCss(String line, String urlname) throws Exception {
         int currentcss = line.indexOf("href=\"");
         boolean del = false;
         if(currentcss > 0) {
-            int endIndex = line.indexOf(".css");
+            int endIndex = line.indexOf(".css/");
             if(endIndex > 0) {
+                System.out.println("getCss");
                 String css = line.substring(currentcss, endIndex);
-
-                //String urlcss = urlname.substring(currentcss,endIndex) + css + ".css/";
+                URI uri = new URI(urlname);
+                String domain = uri.getHost();
+                System.out.println("Host: " + domain);
                 css = css.replaceAll("href=\"", "");
-                css = css + ".css/";
-                css = urlname.substring(urlname.indexOf("http://"),urlname.indexOf("/")) + css;
-                //css = css.replaceAll("href=\"", "");
+                css = domain + css + ".css/";
                 System.out.println(css);
-                //System.out.println("Urlclass: " + urlcss);
-                //System.out.println("Done");
             }
-            //File tmp = new File("src/css/"+urlname);
-            /*if(tmp.exists()) del = tmp.delete();
-            if(!tmp.mkdirs()) {
-                System.out.println("getCss:Error creating folder");
-            }*/
         }
     }
     public static ArrayList<String> getSubURLs(String urlString) {
@@ -69,7 +62,6 @@ public class WebCrawler2{
             java.net.URL url = new java.net.URL(urlString);
             Scanner input = new Scanner(url.openStream());
             int current = 0;
-            int currentcss = 0;
             String urlname = null;
             while (input.hasNext()) {
                 String line = input.nextLine();
@@ -80,11 +72,26 @@ public class WebCrawler2{
                         urlname = line.substring(current, endIndex);
                         list.add(urlname);
                         current = line.indexOf("http:", endIndex);
-                    }
-                    else
+                    } else
                         current = -1;
+                    //getCss(line,urlname);
+                    int currentcss = line.indexOf("href=\"");
+                    boolean del = false;
+                    if (currentcss > 0) {
+                        int endIndex2 = line.indexOf(".css/");
+                        if (endIndex2 > 0) {
+                            //System.out.println("getCss");
+                            String css = line.substring(currentcss, endIndex2);
+                            URI uri = new URI(urlname);
+                            String domain = uri.getHost();
+                            System.out.println("Host: " + domain);
+                            css = css.replaceAll("href=\"", "");
+                            css = domain + css + ".css/";
+                            System.out.println(css);
+                        }
+                    }
                 }
-                if (urlname != null) getCss(line,urlname);
+
 
             }
         }
