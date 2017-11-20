@@ -1,6 +1,5 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -38,19 +37,17 @@ public class WebCrawler2{
             }
         }
     }
-    public static void getCss(String line, String urlname) throws Exception {
+    public static void getCss(String line, String url) throws Exception {
         int currentcss = line.indexOf("href=\"");
         boolean del = false;
         if(currentcss > 0) {
-            int endIndex = line.indexOf(".css/");
+            int endIndex = line.indexOf(".css");
             if(endIndex > 0) {
-                System.out.println("getCss");
+                //System.out.println("getCss");
                 String css = line.substring(currentcss, endIndex);
-                URI uri = new URI(urlname);
-                String domain = uri.getHost();
-                System.out.println("Host: " + domain);
+                //System.out.println("Host: " + url);
                 css = css.replaceAll("href=\"", "");
-                css = domain + css + ".css/";
+                css = "www." + url + css + ".css";
                 System.out.println(css);
             }
         }
@@ -74,26 +71,12 @@ public class WebCrawler2{
                         current = line.indexOf("http:", endIndex);
                     } else
                         current = -1;
-                    //getCss(line,urlname);
-                    int currentcss = line.indexOf("href=\"");
-                    boolean del = false;
-                    if (currentcss > 0) {
-                        int endIndex2 = line.indexOf(".css/");
-                        if (endIndex2 > 0) {
-                            //System.out.println("getCss");
-                            String css = line.substring(currentcss, endIndex2);
-                            URI uri = new URI(urlname);
-                            String domain = uri.getHost();
-                            System.out.println("Host: " + domain);
-                            css = css.replaceAll("href=\"", "");
-                            css = domain + css + ".css/";
-                            System.out.println(css);
-                        }
                     }
+                getCss(line,url.getHost());
                 }
 
 
-            }
+
         }
         catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
